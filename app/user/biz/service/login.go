@@ -14,7 +14,10 @@ func NewLoginService(ctx context.Context) *LoginService {
 
 // Run create note info
 func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResp, err error) {
-	// Finish your business logic.
-
+	//klog.Info("LoginRqp:%+v", req)
+	//_, err = model.GetByEmail(mysql.DB, s.ctx, req.Email)
+	//if err != nil {
+	//	klog.Error("LoginError:%+v", err)
+	//}
 	return
 }

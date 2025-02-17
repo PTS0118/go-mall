@@ -26,9 +26,9 @@ gen-client: ## gen client code of {svc}. example: make gen-client svc=product
 gen-server: ## gen service code of {svc}. example: make gen-server svc=product
 	@cd app/${svc} && cwgo server --type RPC --service ${svc} --module github.com/PTS0118/go-mall/app/${svc} --pass "-use github.com/PTS0118/go-mall/rpc_gen/kitex_gen"  -I ../../idl  --idl ../../idl/${svc}.proto
 
-.PHONY: gen-frontend
-gen-frontend:
-	@cd app/frontend && cwgo server -I ../../idl --type HTTP --service frontend --module github.com/PTS0118/go-mall/app/frontend --idl ../../idl/frontend/checkout_page.proto
+.PHONY: gen-api
+gen-api:
+	@cd api && cwgo server -I ../idl --type HTTP --service api --module github.com/PTS0118/go-mall/api --idl ../idl/api/${svc}_api.proto
 
 ##@ Build
 
@@ -69,7 +69,7 @@ env-stop: ## stop all docker
 
 .PHONY: clean
 clean: ## clern up all the tmp files
-	@rm -r app/**/log/ app/**/tmp/
+	@rm -r app/**/log/ app/**/tmp/ api/log api/tmp/
 
 ##@ Open Browser
 
