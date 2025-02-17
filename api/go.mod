@@ -2,7 +2,10 @@ module github.com/PTS0118/go-mall/api
 
 go 1.21.5
 
-replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
+replace (
+	github.com/apache/thrift => github.com/apache/thrift v0.13.0
+	github.com/PTS0118/go-mall/api => ../api
+)
 
 require (
 	github.com/cloudwego/hertz v0.9.5
@@ -20,6 +23,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
+	github.com/hertz-contrib/jwt v1.0.2
 )
 
 require (

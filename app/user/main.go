@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/PTS0118/go-mall/app/user/biz/dal"
 	"github.com/joho/godotenv"
 	"gopkg.in/natefinch/lumberjack.v2"
 	"net"
@@ -18,6 +19,8 @@ import (
 
 func main() {
 	_ = godotenv.Load()
+	//mysql redis init
+	dal.Init()
 	opts := kitexInit()
 
 	svr := userservice.NewServer(new(UserServiceImpl), opts...)

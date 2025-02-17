@@ -4,6 +4,8 @@ package main
 
 import (
 	"context"
+	"github.com/PTS0118/go-mall/api/biz/dal"
+	"github.com/PTS0118/go-mall/api/biz/mw"
 	"github.com/PTS0118/go-mall/api/infra/rpc"
 	"time"
 
@@ -26,8 +28,9 @@ import (
 
 func main() {
 	// init dal
-	// dal.Init()
+	dal.Init()
 	rpc.InitClient()
+	mw.Init()
 	address := conf.GetConf().Hertz.Address
 	h := server.New(server.WithHostPorts(address))
 

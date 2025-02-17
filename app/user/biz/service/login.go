@@ -2,6 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
+	"github.com/PTS0118/go-mall/app/user/biz/dal/mysql"
+	"github.com/PTS0118/go-mall/app/user/biz/model"
 	user "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/user"
 )
 
@@ -15,7 +18,12 @@ func NewLoginService(ctx context.Context) *LoginService {
 // Run create note info
 func (s *LoginService) Run(req *user.LoginReq) (resp *user.LoginResp, err error) {
 	//klog.Info("LoginRqp:%+v", req)
-	//_, err = model.GetByEmail(mysql.DB, s.ctx, req.Email)
+	if mysql.DB != nil {
+		userLogin, _ := model.GetByEmail(mysql.DB, s.ctx, "test@test")
+		fmt.Printf("user%+v", userLogin)
+	} else {
+		println("mysql is nil")
+	}
 	//if err != nil {
 	//	klog.Error("LoginError:%+v", err)
 	//}

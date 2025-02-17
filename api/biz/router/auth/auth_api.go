@@ -4,6 +4,7 @@ package auth
 
 import (
 	auth "github.com/PTS0118/go-mall/api/biz/handler/auth"
+	"github.com/PTS0118/go-mall/api/biz/mw"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
@@ -15,12 +16,15 @@ import (
 
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
 func Register(r *server.Hertz) {
+	r.POST("/register", auth.Register)
+	r.POST("/login", mw.JwtMiddle.LoginHandler)
+	_ = r.Group("/auth", mw.JwtMiddle.MiddlewareFunc())
 
-	root := r.Group("/", rootMw()...)
-	{
-		_auth := root.Group("/auth", _authMw()...)
-		_auth.GET("/login", append(_loginMw(), auth.Login)...)
-		_auth.POST("/logout", append(_logoutMw(), auth.Logout)...)
-		_auth.POST("/register", append(_registerMw(), auth.Register)...)
-	}
+	//root := r.Group("/auth", rootMw()...)
+	//{
+	//	_auth := root.Group("/", _authMw()...)
+	//	_auth.POST("/login", append(_loginMw(), auth.Login)...)
+	//	_auth.POST("/logout", append(_logoutMw(), auth.Logout)...)
+	//	_auth.POST("/register", append(_registerMw(), auth.Register)...)
+	//}
 }

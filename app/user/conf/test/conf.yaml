@@ -14,7 +14,7 @@ registry:
   password: ""
 
 mysql:
-  dsn: "root:Pan20020118@.@tcp(60.205.91.43:3306)/?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "root:Pan20020118@.@tcp(60.205.91.43:3306)/go_mall?charset=utf8mb4&parseTime=True&loc=Local"
 
 redis:
   address: "127.0.0.1:6379"
