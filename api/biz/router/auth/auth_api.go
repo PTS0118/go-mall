@@ -18,7 +18,7 @@ import (
 func Register(r *server.Hertz) {
 	r.POST("/register", auth.Register)
 	r.POST("/login", mw.JwtMiddle.LoginHandler)
-	_ = r.Group("/auth", mw.JwtMiddle.MiddlewareFunc())
+	_ = r.Group("/a", mw.JwtMiddle.MiddlewareFunc())
 
 	//root := r.Group("/auth", rootMw()...)
 	//{

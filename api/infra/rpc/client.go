@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"github.com/PTS0118/go-mall/rpc_gen/kitex_gen/product/productcatalogservice"
 	//"context"
 	//"github.com/cloudwego/biz-demo/gomall/common/mtl"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
@@ -26,8 +27,8 @@ import (
 )
 
 var (
-	//ProductClient  productcatalogservice.Client
-	UserClient userservice.Client
+	ProductClient productcatalogservice.Client
+	UserClient    userservice.Client
 	//CartClient     cartservice.Client
 	//CheckoutClient checkoutservice.Client
 	//OrderClient    orderservice.Client
@@ -49,7 +50,7 @@ func InitClient() {
 		//	RegistryAddr:       registryAddr,
 		//	CurrentServiceName: "api",
 		//})
-		//initProductClient()
+		initProductClient()
 		initUserClient()
 		//initCartClient()
 		//initCheckoutClient()
@@ -57,39 +58,43 @@ func InitClient() {
 	})
 }
 
-//func initProductClient() {
-//	var opts []client.Option
-//
-//	cbs := circuitbreak.NewCBSuite(func(ri rpcinfo.RPCInfo) string {
-//		return circuitbreak.RPCInfo2Key(ri)
-//	})
-//	cbs.UpdateServiceCBConfig("shop-frontend/product/GetProduct", circuitbreak.CBConfig{Enable: true, ErrRate: 0.5, MinSample: 2})
-//
-//	opts = append(opts, commonSuite, client.WithCircuitBreaker(cbs), client.WithFallback(fallback.NewFallbackPolicy(fallback.UnwrapHelper(func(ctx context.Context, req, resp interface{}, err error) (fbResp interface{}, fbErr error) {
-//		methodName := rpcinfo.GetRPCInfo(ctx).To().Method()
-//		if err == nil {
-//			return resp, err
-//		}
-//		if methodName != "ListProducts" {
-//			return resp, err
-//		}
-//		return &product.ListProductsResp{
-//			Products: []*product.Product{
-//				{
-//					Price:       6.6,
-//					Id:          3,
-//					Picture:     "/static/image/t-shirt.jpeg",
-//					Name:        "T-Shirt",
-//					Description: "CloudWeGo T-Shirt",
-//				},
-//			},
-//		}, nil
-//	}))))
-//	opts = append(opts, client.WithTracer(prometheus.NewClientTracer("", "", prometheus.WithDisableServer(true), prometheus.WithRegistry(mtl.Registry))))
-//
-//	ProductClient, err = productcatalogservice.NewClient("product", opts...)
-//	frontendutils.MustHandleError(err)
-//}
+func initProductClient() {
+	ProductClient, err = productcatalogservice.NewClient("product", client.WithResolver(resolver), client.WithRPCTimeout(time.Second*3))
+	if err != nil {
+		hlog.Fatal(err)
+	}
+	//var opts []client.Option
+	//
+	//cbs := circuitbreak.NewCBSuite(func(ri rpcinfo.RPCInfo) string {
+	//	return circuitbreak.RPCInfo2Key(ri)
+	//})
+	//cbs.UpdateServiceCBConfig("shop-frontend/product/GetProduct", circuitbreak.CBConfig{Enable: true, ErrRate: 0.5, MinSample: 2})
+	//
+	//opts = append(opts, commonSuite, client.WithCircuitBreaker(cbs), client.WithFallback(fallback.NewFallbackPolicy(fallback.UnwrapHelper(func(ctx context.Context, req, resp interface{}, err error) (fbResp interface{}, fbErr error) {
+	//	methodName := rpcinfo.GetRPCInfo(ctx).To().Method()
+	//	if err == nil {
+	//		return resp, err
+	//	}
+	//	if methodName != "ListProducts" {
+	//		return resp, err
+	//	}
+	//	return &product.ListProductsResp{
+	//		Products: []*product.Product{
+	//			{
+	//				Price:       6.6,
+	//				Id:          3,
+	//				Picture:     "/static/image/t-shirt.jpeg",
+	//				Name:        "T-Shirt",
+	//				Description: "CloudWeGo T-Shirt",
+	//			},
+	//		},
+	//	}, nil
+	//}))))
+	//opts = append(opts, client.WithTracer(prometheus.NewClientTracer("", "", prometheus.WithDisableServer(true), prometheus.WithRegistry(mtl.Registry))))
+	//
+	//ProductClient, err = productcatalogservice.NewClient("product", opts...)
+	//frontendutils.MustHandleError(err)
+}
 
 func initUserClient() {
 	UserClient, err = userservice.NewClient("user", client.WithResolver(resolver), client.WithRPCTimeout(time.Second*3))

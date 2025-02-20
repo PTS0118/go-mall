@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/PTS0118/go-mall/api/biz/dal/mysql"
 	"github.com/PTS0118/go-mall/api/biz/model"
 	utils2 "github.com/PTS0118/go-mall/api/biz/utils"
 	"github.com/cloudwego/hertz/pkg/app"
@@ -24,7 +23,7 @@ var (
 func Init() {
 	var err error
 	JwtMiddle, err = jwt.New(&jwt.HertzJWTMiddleware{
-		Realm:         "test zone",
+		Realm:         "hertz jwt",
 		Key:           []byte("secret key"),
 		Timeout:       time.Hour,
 		MaxRefresh:    time.Hour,
@@ -46,15 +45,19 @@ func Init() {
 			if err := c.BindAndValidate(&loginStruct); err != nil {
 				return nil, err
 			}
-			users, err := mysql.CheckUser(loginStruct.Username, utils2.MD5(loginStruct.Password))
+			users, err := model.CheckUser(loginStruct.Username, utils2.MD5(loginStruct.Password))
 			if err != nil {
 				return nil, err
 			}
 			if len(users) == 0 {
 				return nil, errors.New("user already exists or wrong password")
 			}
-			fmt.Printf("login获取到用户啦:%+v", users[0])
-			return users[0], nil
+			fmt.Println(&users[0])
+			return &model.User{
+				UserName: users[0].UserName,
+				Email:    users[0].Email,
+				Password: users[0].Password,
+			}, nil
 		},
 		IdentityKey: IdentityKey,
 		IdentityHandler: func(ctx context.Context, c *app.RequestContext) interface{} {

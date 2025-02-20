@@ -1,25 +1,104 @@
 syntax = "proto3";
 
-package frontend.product;
+package api.product;
 
 import "api.proto";
-import "frontend/common.proto";
+//import "common.proto";
 
-option go_package = "frontend/product";
+option go_package = "api/product";
+
+message Product {
+  int32 id = 1 [(api.body) = "id"];
+  string name = 2 [(api.body) = "name"];
+  string description = 3 [(api.body) = "description"];
+  string picture = 4 [(api.body) = "picture"];
+  float price = 5 [(api.body) = "price"];
+  repeated string categories = 6 [(api.body) = "categories"];
+}
 
 message ProductReq {
-  uint32 id = 1 [(api.query) = "id"];
+  int32 id = 1 [(api.query) = "id"];
+}
+
+message ProductResp {
+  int32 status_code = 1; //0表示成功
+  string status_msg = 2;
+  Product product = 3;
 }
 
 message SearchProductsReq {
   string q = 1 [(api.query) = "q"];
 }
 
+
+message SearchProductsResp {
+  int32 status_code = 1; //0表示成功
+  string status_msg = 2;
+}
+
+
+message ListProductsReq{
+  int32 page = 1;
+  int64 pageSize = 2;
+  string categoryName = 3;
+}
+
+message ListProductsResp {
+  int32 status_code = 1; //0表示成功
+  string status_msg = 2;
+  repeated Product product = 3;
+}
+
+message CreateProductReq {
+  Product product = 1;
+}
+
+message CreateProductResp {
+  int32 status_code = 1; //0表示成功
+  string status_msg = 2;
+  int32 id = 3;
+}
+
+message UpdateProductReq {
+  Product product = 1;
+}
+
+message UpdateProductResp {
+  int32 status_code = 1; //0表示成功
+  string status_msg = 2;
+}
+
+message DeleteProductReq {
+  int32 id = 1;
+}
+
+message DeleteProductResp {
+  int32 status_code = 1; //0表示成功
+  string status_msg = 2;
+}
+
+
 service ProductService {
-  rpc GetProduct(ProductReq) returns (common.Empty) {
+  rpc GetProduct(ProductReq) returns (ProductResp) {
     option (api.get) = "/product";
   }
-  rpc SearchProducs(SearchProductsReq) returns (common.Empty) {
+  rpc SearchProducs(SearchProductsReq) returns (SearchProductsResp) {
     option (api.get) = "/search";
   }
+  rpc ListProducts(ListProductsReq) returns (ListProductsResp) {
+    option (api.post) = "/list";
+  }
+  //创建商品
+  rpc CreateProduct(CreateProductReq) returns (CreateProductResp) {
+    option (api.post) = "/create";
+  }
+  //更新商品
+  rpc UpdateProduct(UpdateProductReq) returns (UpdateProductResp) {
+    option (api.post) = "/update";
+  }
+  //删除商品
+  rpc DeleteProduct(DeleteProductReq) returns (DeleteProductResp) {
+    option (api.delete) = "/delete";
+  }
+
 }
