@@ -11,7 +11,12 @@ import (
 )
 
 // GetProduct .
-// @router /product [GET]
+// ProductHandle 商品Handle
+// @Summary 获取商品
+// @Description 获取商品
+// @Accept application/json
+// @Produce application/json
+// @Router /a/product [get]
 func GetProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req product.ProductReq
@@ -74,7 +79,12 @@ func ListProducts(ctx context.Context, c *app.RequestContext) {
 }
 
 // CreateProduct .
-// @router /create [POST]
+// ProductHandle 商品Handle
+// @Summary 创建商品
+// @Description 创建商品
+// @Accept application/json
+// @Produce application/json
+// @Router /a/create [post]
 func CreateProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req product.CreateProductReq

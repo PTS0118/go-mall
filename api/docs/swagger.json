@@ -1,0 +1,61 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/a/product": {
+            "get": {
+                "description": "获取商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "获取商品",
+                "responses": {}
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/create": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/delete": {
+            "delete": {
+                "responses": {}
+            }
+        },
+        "/list": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/search": {
+            "get": {
+                "responses": {}
+            }
+        },
+        "/update": {
+            "post": {
+                "responses": {}
+            }
+        }
+    }
+}

@@ -18,7 +18,11 @@ func (p Product) TableName() string {
 	return "product"
 }
 
-//创建商品
+// 创建商品
+func CreateProduct(ctx context.Context, p *Product) (id int32, err error) {
+	result := mysql.DB.Create(&p)
+	return p.Id, result.Error
+}
 
 //删除商品
 

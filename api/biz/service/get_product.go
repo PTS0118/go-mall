@@ -18,8 +18,16 @@ func NewGetProductService(Context context.Context, RequestContext *app.RequestCo
 }
 
 func (h *GetProductService) Run(req *product.ProductReq) (resp *product.ProductResp, err error) {
+	//判断参数是否为nil
+	if req == nil {
+		resp = &product.ProductResp{
+			StatusCode: -1,
+			StatusMsg:  "商品ID为空",
+			Product:    &product.Product{},
+		}
+		return resp, nil
+	}
 	data, err := rpc.ProductClient.GetProduct(h.Context, &rpcproduct.GetProductReq{Id: req.GetId()})
-
 	if err != nil {
 		resp = &product.ProductResp{
 			StatusCode: data.GetCode(),

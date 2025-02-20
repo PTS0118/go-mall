@@ -46,7 +46,6 @@ func (s *GetProductService) Run(req *product.GetProductReq) (resp *product.GetPr
 				Categories:  categoryList,
 			},
 		}
-		klog.Info("商品查询成功")
 	}
 	return resp, err
 }

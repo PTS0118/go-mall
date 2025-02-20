@@ -7,6 +7,8 @@ import (
 	"github.com/PTS0118/go-mall/api/biz/dal"
 	"github.com/PTS0118/go-mall/api/biz/mw"
 	"github.com/PTS0118/go-mall/api/infra/rpc"
+	"github.com/hertz-contrib/swagger"
+	swaggerFiles "github.com/swaggo/files"
 	"time"
 
 	"github.com/PTS0118/go-mall/api/biz/router"
@@ -85,4 +87,8 @@ func registerMiddleware(h *server.Hertz) {
 
 	// cores
 	h.Use(cors.Default())
+
+	//swagger
+	url := swagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
+	h.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler, url))
 }

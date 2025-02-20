@@ -1,0 +1,37 @@
+info:
+  contact: {}
+paths:
+  /a/product:
+    get:
+      consumes:
+      - application/json
+      description: 获取商品
+      produces:
+      - application/json
+      responses: {}
+      summary: 获取商品
+  /auth/login:
+    post:
+      responses: {}
+  /auth/logout:
+    post:
+      responses: {}
+  /auth/register:
+    post:
+      responses: {}
+  /create:
+    post:
+      responses: {}
+  /delete:
+    delete:
+      responses: {}
+  /list:
+    post:
+      responses: {}
+  /search:
+    get:
+      responses: {}
+  /update:
+    post:
+      responses: {}
+swagger: "2.0"

@@ -18,6 +18,7 @@ import (
 func Register(r *server.Hertz) {
 
 	//root := r.Group("/a", rootMw()...)
+	// 添加/a路由分组为JWT权限管控分组路由
 	root := r.Group("/a", mw.JwtMiddle.MiddlewareFunc())
 	root.POST("/create", append(_createproductMw(), product.CreateProduct)...)
 	root.DELETE("/delete", append(_deleteproductMw(), product.DeleteProduct)...)
