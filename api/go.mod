@@ -1,6 +1,6 @@
 module github.com/PTS0118/go-mall/api
 
-go 1.21.5
+go 1.21.0
 
 replace (
 	github.com/PTS0118/go-mall/api => ../api
