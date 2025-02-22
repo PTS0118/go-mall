@@ -1,9 +1,13 @@
 package model
 
-import "time"
+import (
+	"gorm.io/plugin/soft_delete"
+	"time"
+)
 
 type Base struct {
-	Id        int32 `json:"id" column:"id" gorm:"primarykey"`
+	Id        int32                 `json:"id" column:"id" gorm:"primarykey"`
+	IsDel     soft_delete.DeletedAt `gorm:"softDelete:flag"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

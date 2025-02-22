@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/PTS0118/go-mall/app/product/biz/model"
 	product "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/product"
 )
 
@@ -14,7 +15,18 @@ func NewDeleteProductService(ctx context.Context) *DeleteProductService {
 
 // Run create note info
 func (s *DeleteProductService) Run(req *product.DeleteProductReq) (resp *product.DeleteProductResp, err error) {
-	// Finish your business logic.
+	err = model.DeleteProduct(s.ctx, req.GetId())
+	if err != nil {
+		resp = &product.DeleteProductResp{
+			Code:    -1,
+			Message: "删除商品失败",
+		}
+	} else {
+		resp = &product.DeleteProductResp{
+			Code:    0,
+			Message: "删除商品成功",
+		}
+	}
 
-	return
+	return resp, err
 }
