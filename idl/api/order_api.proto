@@ -3,12 +3,14 @@ syntax = "proto3";
 package frontend.order;
 
 import "api.proto";
-import "frontend/common.proto";
+//import "/common.proto";
 
-option go_package = "/frontend/order";
+option go_package = "/api/order";
+
+message Empty{}
 
 service OrderService {
-  rpc OrderList(common.Empty) returns (common.Empty) {
+  rpc OrderList(Empty) returns (Empty) {
     option (api.get) = "/order";
   }
 }
