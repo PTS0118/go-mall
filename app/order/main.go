@@ -1,16 +1,15 @@
 package main
 
 import (
-	consul "github.com/kitex-contrib/registry-consul"
 	"net"
 	"time"
 
-	"github.com/PTS0118/go-mall/app/cart/conf"
-	"github.com/PTS0118/go-mall/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
+	"github.com/PTS0118/go-mall/app/order/conf"
+	"github.com/PTS0118/go-mall/rpc_gen/kitex_gen/order/orderservice"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -18,7 +17,7 @@ import (
 func main() {
 	opts := kitexInit()
 
-	svr := cartservice.NewServer(new(CartServiceImpl), opts...)
+	svr := orderservice.NewServer(new(OrderServiceImpl), opts...)
 
 	err := svr.Run()
 	if err != nil {
@@ -38,13 +37,6 @@ func kitexInit() (opts []server.Option) {
 	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
 		ServiceName: conf.GetConf().Kitex.Service,
 	}))
-
-	//注册服务
-	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
-	if err != nil {
-		klog.Fatal(err)
-	}
-	opts = append(opts, server.WithRegistry(r))
 
 	// klog
 	logger := kitexlogrus.NewLogger()
