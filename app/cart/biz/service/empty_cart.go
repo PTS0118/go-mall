@@ -33,4 +33,5 @@ func (s *EmptyCartService) Run(req *cart.EmptyCartReq) (resp *cart.EmptyCartResp
 			Message: "清空购物车成功",
 		}
 	}
+	return resp, err
 }

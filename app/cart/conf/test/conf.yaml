@@ -1,5 +1,5 @@
 kitex:
-  service: "product"
+  service: "cart"
   address: "127.0.0.1:8886"
   log_level: info
   log_file_name: "log/kitex.log"

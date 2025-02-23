@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/PTS0118/go-mall/app/cart/biz/model"
 	cart "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/cart"
@@ -26,7 +27,7 @@ func (s *AddItemService) Run(req *cart.AddItemReq) (resp *cart.AddItemResp, err 
 	if err != nil {
 		resp = &cart.AddItemResp{
 			Code:    0,
-			Message: "购物车添加商品成功",
+			Message: fmt.Sprintf("购物车添加商品成功：%v", id),
 		}
 		klog.Error("购物车添加商品失败：%v", err)
 	} else {

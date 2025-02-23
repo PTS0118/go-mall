@@ -17,7 +17,6 @@ import (
 
 	"github.com/PTS0118/go-mall/api/conf"
 
-	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart/cartservice"
 	//"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/checkout/checkoutservice"
 	//"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/order/orderservice"
 	//"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/product"
