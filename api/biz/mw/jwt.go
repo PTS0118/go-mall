@@ -17,7 +17,7 @@ import (
 
 var (
 	JwtMiddle   *jwt.HertzJWTMiddleware
-	IdentityKey = "identity"
+	IdentityKey = "uid"
 )
 
 func Init() {
@@ -54,6 +54,7 @@ func Init() {
 			}
 			fmt.Println(&users[0])
 			return &model.User{
+				Base:     model.Base{Id: users[0].Base.Id},
 				UserName: users[0].UserName,
 				Email:    users[0].Email,
 				Password: users[0].Password,
@@ -62,14 +63,15 @@ func Init() {
 		IdentityKey: IdentityKey,
 		IdentityHandler: func(ctx context.Context, c *app.RequestContext) interface{} {
 			claims := jwt.ExtractClaims(ctx, c)
+			idFloat := claims[IdentityKey].(float64)
 			return &model.User{
-				UserName: claims[IdentityKey].(string),
+				Base: model.Base{Id: int(idFloat)},
 			}
 		},
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*model.User); ok {
 				return jwt.MapClaims{
-					IdentityKey: v.UserName,
+					IdentityKey: v.Base.Id,
 				}
 			}
 			return jwt.MapClaims{}

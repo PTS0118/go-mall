@@ -10,7 +10,75 @@ option go_package = "/api/order";
 message Empty{}
 
 service OrderService {
-  rpc OrderList(Empty) returns (Empty) {
-    option (api.get) = "/order";
+  rpc ListOrders(Empty) returns (Empty) {
+    option (api.get) = "/list";
   }
+  rpc PlaceOrder(PlaceOrderReq) returns (PlaceOrderResp) {
+    option (api.post) = "/place";
+  }
+  rpc MarkOrderPaid(MarkOrderPaidReq) returns (MarkOrderPaidResp) {
+    option (api.post) = "/markPaid";
+  }
+  rpc UpdateOrder(UpdateOrderReq) returns (UpdateOrderResp) {
+    option (api.post) = "/update";
+  }
+}
+
+message OrderItem {
+  int32 product_id = 1  [(api.body) = "productId"];
+  float unit_price = 2 [(api.body) = "unitPrice"];
+  float total_price = 3 [(api.body) = "totalPrice"];
+  int32 count = 4 [(api.body) = "count"];
+}
+
+message PlaceOrderReq {
+  int32 address_id = 1 [(api.body) = "addressId"];
+  repeated OrderItem order_items = 4 [(api.body) = "orderItems"];
+  int32 user_id = 5;
+}
+
+message PlaceOrderResp {
+  int32 status_code = 1; //0-成功 其他值失败
+  string status_msg = 2;
+  string order_id = 3;
+}
+
+message Order {
+  repeated OrderItem order_items = 1 ;
+  string order_id = 2 ;
+  uint32 user_id = 3;
+  int32 address_id = 4;
+  string email = 5;
+  int32 created_at = 6;
+  string telephone = 7;
+}
+
+message ListOrderResp {
+  int32 status_code = 1; //0-成功 其他值失败
+  string status_msg = 2;
+  repeated Order orders = 3;
+}
+
+message MarkOrderPaidReq {
+  uint32 user_id = 1[(api.body) = "userId"];
+  string order_id = 2[(api.body) = "orderId"];
+}
+
+message MarkOrderPaidResp {
+  int32 status_code = 1; //0-成功 其他值失败
+  string status_msg = 2;
+}
+
+//支持修改地址和联系方式
+message UpdateOrderReq {
+  string order_id = 1[(api.body) = "orderId"];
+  int32 address_id = 2[(api.body) = "addressId"];
+  string email = 3[(api.body) = "email"];
+  string telephone = 4[(api.body) = "telephone"];
+  int32 user_id = 5[(api.body) = "userId"];
+}
+
+message UpdateOrderResp {
+  int32 status_code = 1; //0-成功 其他值失败
+  string status_msg = 2;
 }

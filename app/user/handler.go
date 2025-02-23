@@ -21,3 +21,10 @@ func (s *UserServiceImpl) Login(ctx context.Context, req *user.LoginReq) (resp *
 	resp, err = service.NewLoginService(ctx).Run(req)
 	return resp, err
 }
+
+// GetUser implements the UserServiceImpl interface.
+func (s *UserServiceImpl) GetUser(ctx context.Context, req *user.GetUserReq) (resp *user.GetUserResp, err error) {
+	resp, err = service.NewGetUserService(ctx).Run(req)
+
+	return resp, err
+}

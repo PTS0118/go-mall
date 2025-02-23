@@ -3,7 +3,6 @@ package model
 import (
 	"context"
 	"github.com/PTS0118/go-mall/app/product/biz/dal/mysql"
-	"gorm.io/gorm"
 )
 
 type Product struct {
@@ -19,13 +18,12 @@ func (p Product) TableName() string {
 	return "product"
 }
 
-func (p *Product) BeforeDelete(tx *gorm.DB) (err error) {
-	if p.Base.IsDel == 0 {
-		p.IsDel = 1
-		return tx.Save(p).Error // 更新 is_del 字段而不实际删除记录
-	}
-	return nil
-}
+//func (p *Product) BeforeDelete(tx *gorm.DB) (err error) {
+//	if p.Base.IsDel == 0 {
+//		return tx.Model(p).Update("is_del", 1).Error // 更新 is_del 字段而不实际删除记录
+//	}
+//	return nil
+//}
 
 // 创建商品
 func CreateProduct(ctx context.Context, p *Product) (id int32, err error) {
@@ -35,13 +33,13 @@ func CreateProduct(ctx context.Context, p *Product) (id int32, err error) {
 
 // 删除商品
 func DeleteProduct(ctx context.Context, id int32) (err error) {
-	result := mysql.DB.Where("id = ?", id).Delete(&Product{})
+	result := mysql.DB.Delete(&Product{Base: Base{Id: id}})
 	return result.Error
 }
 
 // 更新商品
 func UpdateProduct(ctx context.Context, p *Product) (err error) {
-	result := mysql.DB.Save(&Product{})
+	result := mysql.DB.Save(p)
 	return result.Error
 }
 

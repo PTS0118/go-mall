@@ -2,7 +2,7 @@ package model
 
 import (
 	"context"
-	"github.com/PTS0118/go-mall/api/biz/dal/mysql"
+	"github.com/PTS0118/go-mall/app/user/biz/dal/mysql"
 	"gorm.io/gorm"
 )
 
@@ -32,21 +32,22 @@ func CreateUsers(users []User) error {
 	return mysql.DB.Create(users).Error
 }
 
-func FindUserByNameOrEmail(userName, email string) ([]User, error) {
-	res := make([]User, 0)
-	if err := mysql.DB.Where(mysql.DB.Or("username = ?", userName).
-		Or("email = ?", email)).
-		Find(&res).Error; err != nil {
-		return nil, err
+func FindUserByNameOrEmail(userName, email *string, id int32) (res *User, err error) {
+	// 初始化一个空的查询条件
+	query := mysql.DB.Model(&User{})
+	// 动态添加查询条件
+	if userName != nil && *userName != "" {
+		query = query.Or("username = ?", *userName)
 	}
-	return res, nil
-}
+	if email != nil && *email != "" {
+		query = query.Or("email = ?", *email)
+	}
+	if id != 0 {
+		query = query.Or("id = ?", id)
+	}
 
-func CheckUser(account, password string) ([]User, error) {
-	res := make([]User, 0)
-	if err := mysql.DB.Where(mysql.DB.Or("username = ?", account).
-		Or("email = ?", account)).Where("password = ?", password).
-		Find(&res).Error; err != nil {
+	// 执行查询
+	if err = query.First(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil

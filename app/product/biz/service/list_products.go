@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"github.com/PTS0118/go-mall/app/product/biz/model"
 	product "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/product"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -36,7 +35,6 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 	} else {
 		list := make([]*product.Product, req.PageSize)
 		for key, value := range data {
-			fmt.Println("key: %v, value: %+v", key, value)
 			categoryList := strings.Split(value.Categories, ",")
 			list[key] = &product.Product{
 				Id:          value.Id,

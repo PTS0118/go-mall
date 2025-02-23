@@ -25,15 +25,14 @@ func (s *UpdateProductService) Run(req *product.UpdateProductReq) (resp *product
 		}
 		return resp, err
 	}
-
 	// 更新现有产品记录的基础信息（Base）和其他字段
+	existingProduct.Base.Id = req.Product.Id
 	existingProduct.Name = req.Product.Name
 	existingProduct.Description = req.Product.Description
 	existingProduct.Picture = req.Product.Picture
 	existingProduct.Price = req.Product.Price
 	existingProduct.Categories = strings.Join(req.Product.Categories, ",")
 	existingProduct.UpdatedAt = time.Now()
-
 	err = model.UpdateProduct(s.ctx, existingProduct)
 	if err != nil {
 		resp = &product.UpdateProductResp{

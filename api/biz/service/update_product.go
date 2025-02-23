@@ -28,6 +28,7 @@ func (h *UpdateProductService) Run(req *product.UpdateProductReq) (resp *product
 		return resp, nil
 	}
 	productData := &rpcproduct.Product{
+		Id:          req.Product.Id,
 		Name:        req.Product.Name,
 		Description: req.Product.Description,
 		Picture:     req.Product.Picture,

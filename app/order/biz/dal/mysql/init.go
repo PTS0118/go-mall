@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"github.com/PTS0118/go-mall/app/product/conf"
+	"github.com/PTS0118/go-mall/app/order/conf"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"gorm.io/gorm/logger"
 

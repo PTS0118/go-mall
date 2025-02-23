@@ -7,38 +7,37 @@ import (
 
 type OrderItem struct {
 	Base
-	UserId     int     `json:"userId" column:"user_id"`
-	OrderId    int     `json:"orderId" column:"order_id"`
+	ProductId  int     `json:"productId" column:"product_id"`
+	OrderId    string  `json:"orderId" column:"order_id"`
 	TotalPrice float64 `json:"totalPrice" column:"total_price"`
-	Status     int     `json:"status" column:"status"`
-	Telephone  float32 `json:"telephone" column:"telephone"`
-	AddressId  int     `json:"addressId" column:"address_id"`
+	UnitPrice  float64 `json:"unitPrice" column:"unit_price"`
+	Count      int     `json:"count" column:"count"`
 }
 
-func (p Order) TableName() string {
+func (p OrderItem) TableName() string {
 	return "order_item"
 }
 
-// 创建订单
-func CreateOrderItem(ctx context.Context, p *Order) (id int32, err error) {
+// 创建订单项
+func CreateOrderItem(ctx context.Context, p *OrderItem) (id int32, err error) {
 	result := mysql.DB.Create(&p)
 	return p.Id, result.Error
 }
 
-// 删除订单
+// 删除订单项
 func DeleteOrderItem(ctx context.Context, id int32) (err error) {
-	result := mysql.DB.Where("id = ?", id).Delete(&Order{Base: Base{Id: id}})
+	result := mysql.DB.Where("id = ?", id).Delete(&OrderItem{Base: Base{Id: id}})
 	return result.Error
 }
 
 // 更新订单
-func UpdateOrderItem(ctx context.Context, p *Order) (err error) {
+func UpdateOrderItem(ctx context.Context, p *OrderItem) (err error) {
 	result := mysql.DB.Save(p)
 	return result.Error
 }
 
 // 查找订单列表
-func ListOrderItems(ctx context.Context, userId int) (products []*Order, err error) {
-	result := mysql.DB.Where(&Order{Base: Base{IsDel: 0}, UserId: userId}).Find(&Order{})
-	return products, result.Error
+func ListOrderItems(ctx context.Context, orderId string) (orderItems []*OrderItem, err error) {
+	result := mysql.DB.Where(&OrderItem{Base: Base{IsDel: 0}, OrderId: orderId}).Find(&orderItems)
+	return orderItems, result.Error
 }

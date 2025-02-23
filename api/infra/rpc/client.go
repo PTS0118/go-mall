@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"github.com/PTS0118/go-mall/rpc_gen/kitex_gen/cart/cartservice"
+	"github.com/PTS0118/go-mall/rpc_gen/kitex_gen/order/orderservice"
 	"github.com/PTS0118/go-mall/rpc_gen/kitex_gen/product/productcatalogservice"
 
 	//"context"
@@ -33,7 +34,7 @@ var (
 	UserClient    userservice.Client
 	CartClient    cartservice.Client
 	//CheckoutClient checkoutservice.Client
-	//OrderClient    orderservice.Client
+	OrderClient  orderservice.Client
 	once         sync.Once
 	err          error
 	registryAddr string
@@ -56,7 +57,7 @@ func InitClient() {
 		initUserClient()
 		//initCartClient()
 		//initCheckoutClient()
-		//initOrderClient()
+		initOrderClient()
 	})
 }
 
@@ -105,17 +106,18 @@ func initUserClient() {
 	}
 }
 
-//func initCartClient() {
-//	CartClient, err = cartservice.NewClient("cart", commonSuite)
-//	frontendutils.MustHandleError(err)
-//}
+//	func initCartClient() {
+//		CartClient, err = cartservice.NewClient("cart", commonSuite)
+//		frontendutils.MustHandleError(err)
+//	}
 //
-//func initCheckoutClient() {
-//	CheckoutClient, err = checkoutservice.NewClient("checkout", commonSuite)
-//	frontendutils.MustHandleError(err)
-//}
-//
-//func initOrderClient() {
-//	OrderClient, err = orderservice.NewClient("order", commonSuite)
-//	frontendutils.MustHandleError(err)
-//}
+//	func initCheckoutClient() {
+//		CheckoutClient, err = checkoutservice.NewClient("checkout", commonSuite)
+//		frontendutils.MustHandleError(err)
+//	}
+func initOrderClient() {
+	OrderClient, err = orderservice.NewClient("order", client.WithResolver(resolver), client.WithRPCTimeout(time.Second*3))
+	if err != nil {
+		hlog.Fatal(err)
+	}
+}

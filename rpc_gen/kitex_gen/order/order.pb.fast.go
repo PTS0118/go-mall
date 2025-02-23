@@ -29,6 +29,11 @@ func (x *OrderItem) FastRead(buf []byte, _type int8, number int32) (offset int, 
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -54,6 +59,11 @@ func (x *OrderItem) fastReadField2(buf []byte, _type int8) (offset int, err erro
 
 func (x *OrderItem) fastReadField3(buf []byte, _type int8) (offset int, err error) {
 	x.TotalPrice, offset, err = fastpb.ReadFloat(buf, _type)
+	return offset, err
+}
+
+func (x *OrderItem) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.Count, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
@@ -514,6 +524,7 @@ func (x *OrderItem) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
 	return offset
 }
 
@@ -538,6 +549,14 @@ func (x *OrderItem) fastWriteField3(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteFloat(buf[offset:], 3, x.GetTotalPrice())
+	return offset
+}
+
+func (x *OrderItem) fastWriteField4(buf []byte) (offset int) {
+	if x.Count == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 4, x.GetCount())
 	return offset
 }
 
@@ -887,6 +906,7 @@ func (x *OrderItem) Size() (n int) {
 	n += x.sizeField1()
 	n += x.sizeField2()
 	n += x.sizeField3()
+	n += x.sizeField4()
 	return n
 }
 
@@ -911,6 +931,14 @@ func (x *OrderItem) sizeField3() (n int) {
 		return n
 	}
 	n += fastpb.SizeFloat(3, x.GetTotalPrice())
+	return n
+}
+
+func (x *OrderItem) sizeField4() (n int) {
+	if x.Count == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(4, x.GetCount())
 	return n
 }
 
@@ -1257,6 +1285,7 @@ var fieldIDToName_OrderItem = map[int32]string{
 	1: "ProductId",
 	2: "UnitPrice",
 	3: "TotalPrice",
+	4: "Count",
 }
 
 var fieldIDToName_PlaceOrderReq = map[int32]string{

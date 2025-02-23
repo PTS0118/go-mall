@@ -4,6 +4,7 @@ package order
 
 import (
 	order "github.com/PTS0118/go-mall/api/biz/handler/order"
+	"github.com/PTS0118/go-mall/api/biz/mw"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
@@ -16,7 +17,7 @@ import (
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
 func Register(r *server.Hertz) {
 
-	root := r.Group("/", rootMw()...)
+	root := r.Group("/a/order", mw.JwtMiddle.MiddlewareFunc())
 	root.GET("/list", append(_listordersMw(), order.ListOrders)...)
 	root.POST("/markPaid", append(_markorderpaidMw(), order.MarkOrderPaid)...)
 	root.POST("/place", append(_placeorderMw(), order.PlaceOrder)...)

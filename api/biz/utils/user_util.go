@@ -24,8 +24,5 @@ func GetUserId(c *app.RequestContext) (userId int) {
 	}
 
 	userId = user.Base.Id
-
-	// 使用userId进行进一步处理...
-	c.JSON(200, map[string]interface{}{"message": "User ID is", "userId": userId})
 	return userId
 }
