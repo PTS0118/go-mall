@@ -232,6 +232,8 @@ type EmptyCartReq struct {
 	unknownFields protoimpl.UnknownFields
 
 	UserId uint32 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Page   int32  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize int64 `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 }
 
 func (x *EmptyCartReq) Reset() {

@@ -1,20 +1,23 @@
 package rpc
 
 import (
+	"github.com/PTS0118/go-mall/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/PTS0118/go-mall/rpc_gen/kitex_gen/product/productcatalogservice"
+
 	//"context"
 	//"github.com/cloudwego/biz-demo/gomall/common/mtl"
-	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"github.com/cloudwego/kitex/client"
-	"github.com/cloudwego/kitex/pkg/discovery"
-	consul "github.com/kitex-contrib/registry-consul"
 	"log"
 	"sync"
 	"time"
 
+	"github.com/cloudwego/hertz/pkg/common/hlog"
+	"github.com/cloudwego/kitex/client"
+	"github.com/cloudwego/kitex/pkg/discovery"
+	consul "github.com/kitex-contrib/registry-consul"
+
 	"github.com/PTS0118/go-mall/api/conf"
 
-	//"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart/cartservice"
+	"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/cart/cartservice"
 	//"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/checkout/checkoutservice"
 	//"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/order/orderservice"
 	//"github.com/cloudwego/biz-demo/gomall/rpc_gen/kitex_gen/product"
@@ -29,7 +32,7 @@ import (
 var (
 	ProductClient productcatalogservice.Client
 	UserClient    userservice.Client
-	//CartClient     cartservice.Client
+	CartClient    cartservice.Client
 	//CheckoutClient checkoutservice.Client
 	//OrderClient    orderservice.Client
 	once         sync.Once

@@ -25,6 +25,8 @@ type Empty struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	UserId uint32 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id" query:"user_id"`
 }
 
 func (x *Empty) Reset() {
@@ -151,6 +153,7 @@ type AddCartReq struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	UserId    uint32 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" form:"userId" json:"userId,omitempty"`
 	ProductId uint32 `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" form:"productId" json:"productId,omitempty"`
 	Count     int32  `protobuf:"varint,2,opt,name=count,proto3" form:"count" json:"count,omitempty"`
 }

@@ -4,6 +4,8 @@ import (
 	"context"
 
 	cart "github.com/PTS0118/go-mall/api/hertz_gen/api/cart"
+	"github.com/PTS0118/go-mall/api/infra/rpc"
+	rpccart "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/cart"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
@@ -17,10 +19,27 @@ func NewEmptyCartService(Context context.Context, RequestContext *app.RequestCon
 }
 
 func (h *EmptyCartService) Run(req *cart.Empty) (resp *cart.EmptyCartResp, err error) {
-	//defer func() {
-	// hlog.CtxInfof(h.Context, "req = %+v", req)
-	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
-	//}()
-	// todo edit your code
-	return
+	//判断参数是否为nil
+	if req == nil {
+		resp = &cart.EmptyCartResp{
+			StatusCode: -1,
+			StatusMsg:  "req为空",
+		}
+		return resp, nil
+	}
+	data, err := rpc.CartClient.EmptyCart(h.Context, &rpccart.EmptyCartReq{
+		UserId: req.UserId,
+	})
+	if err != nil {
+		resp = &cart.EmptyCartResp{
+			StatusCode: data.GetCode(),
+			StatusMsg:  data.GetMessage(),
+		}
+	} else {
+		resp = &cart.EmptyCartResp{
+			StatusCode: data.GetCode(),
+			StatusMsg:  data.GetMessage(),
+		}
+	}
+	return resp, err
 }

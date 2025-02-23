@@ -5,6 +5,7 @@ package cart
 import (
 	cart "github.com/PTS0118/go-mall/api/biz/handler/cart"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/PTS0118/go-mall/api/biz/mw"
 )
 
 /*
@@ -16,7 +17,7 @@ import (
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
 func Register(r *server.Hertz) {
 
-	root := r.Group("/", rootMw()...)
+	root := r.Group("/a/cart", mw.JwtMiddle.MiddlewareFunc())
 	root.POST("/add", append(_addcartitemMw(), cart.AddCartItem)...)
 	root.POST("/empty", append(_emptycartMw(), cart.EmptyCart)...)
 	root.GET("/get", append(_getcartMw(), cart.GetCart)...)
