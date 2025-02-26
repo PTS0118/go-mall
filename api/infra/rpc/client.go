@@ -55,7 +55,7 @@ func InitClient() {
 		//})
 		initProductClient()
 		initUserClient()
-		//initCartClient()
+		initCartClient()
 		//initCheckoutClient()
 		initOrderClient()
 	})
@@ -106,11 +106,13 @@ func initUserClient() {
 	}
 }
 
-//	func initCartClient() {
-//		CartClient, err = cartservice.NewClient("cart", commonSuite)
-//		frontendutils.MustHandleError(err)
-//	}
-//
+func initCartClient() {
+	CartClient, err = cartservice.NewClient("cart", client.WithResolver(resolver), client.WithRPCTimeout(time.Second*3))
+	if err != nil {
+		hlog.Fatal(err)
+	}
+}
+
 //	func initCheckoutClient() {
 //		CheckoutClient, err = checkoutservice.NewClient("checkout", commonSuite)
 //		frontendutils.MustHandleError(err)

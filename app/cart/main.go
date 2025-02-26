@@ -1,10 +1,13 @@
 package main
 
 import (
-	consul "github.com/kitex-contrib/registry-consul"
 	"net"
 	"time"
 
+	"github.com/joho/godotenv"
+	consul "github.com/kitex-contrib/registry-consul"
+
+	"github.com/PTS0118/go-mall/app/cart/biz/dal"
 	"github.com/PTS0118/go-mall/app/cart/conf"
 	"github.com/PTS0118/go-mall/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/cloudwego/kitex/pkg/klog"
@@ -16,6 +19,9 @@ import (
 )
 
 func main() {
+	_ = godotenv.Load()
+	//mysql redis init
+	dal.Init()
 	opts := kitexInit()
 
 	svr := cartservice.NewServer(new(CartServiceImpl), opts...)
