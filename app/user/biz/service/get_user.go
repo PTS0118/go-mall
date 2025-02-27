@@ -22,7 +22,7 @@ func (s *GetUserService) Run(req *user.GetUserReq) (resp *user.GetUserResp, err 
 	resp = &user.GetUserResp{
 		Id:        int32(userData.Base.Id),
 		Email:     userData.Email,
-		Username:  userData.UserName,
+		Username:  userData.Username,
 		Telephone: userData.Telephone,
 	}
 	return resp, err

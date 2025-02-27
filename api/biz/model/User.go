@@ -8,10 +8,11 @@ import (
 
 type User struct {
 	Base
-	UserName  string `json:"username" column:"username"`
+	Username  string `json:"username" column:"username"`
 	Email     string `json:"email" column:"email"`
 	Password  string `json:"password" column:"password"`
 	Telephone string `json:"telephone" column:"telephone"`
+	Role      string `json:"role" column:"role"`
 }
 
 func (u User) TableName() string {

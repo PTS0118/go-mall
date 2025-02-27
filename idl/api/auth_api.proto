@@ -3,14 +3,15 @@ syntax = "proto3";
 package api.auth;
 
 import "api.proto";
-import "common.proto";
 
 option go_package = "/api/auth"; //生成的 Go 代码将放置的位置。
 
 message RegisterReq {
-  string email = 1 [(api.form) = "email"];
-  string password = 2 [(api.form) = "password"];
-  string confirm_password = 3 [(api.form) = "confirm_password"];
+  string email = 1 [(api.body) = "email"];
+  string password = 2 [(api.body) = "password"];
+  string confirm_password = 3 [(api.body) = "confirm_password"];
+  string username = 4 [(api.body) = "username"];
+  string telephone = 5 [(api.body) = "telephone"];
 }
 
 message LoginReq {
@@ -19,14 +20,23 @@ message LoginReq {
   string next = 3 [(api.query) = "next"];
 }
 
+message Empty {
+
+}
+
+message RegisterResp {
+  int32 status_code = 1;
+  string status_msg = 2;
+}
+
 service AuthService {
-  rpc register(RegisterReq) returns (common.Empty) {
+  rpc register(RegisterReq) returns (RegisterResp) {
     option (api.post) = "/register";
   }
-  rpc login(LoginReq) returns (common.Empty) {
+  rpc login(LoginReq) returns (Empty) {
     option (api.post) = "/login";
   }
-  rpc logout(common.Empty) returns (common.Empty) {
+  rpc logout(Empty) returns (Empty) {
     option (api.post) = "/logout";
   }
 }

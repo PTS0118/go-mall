@@ -3,29 +3,29 @@ package model
 import (
 	"context"
 	"github.com/PTS0118/go-mall/app/user/biz/dal/mysql"
-	"gorm.io/gorm"
 )
 
 type User struct {
 	Base
-	UserName  string `json:"username" column:"username"`
+	Username  string `json:"username" column:"username"`
 	Email     string `json:"email" column:"email"`
 	Password  string `json:"password" column:"password"`
 	Telephone string `json:"telephone" column:"telephone"`
+	Role      string `json:"role" column:"role"`
 }
 
 func (u User) TableName() string {
 	return "user"
 }
 
-func GetByEmail(db *gorm.DB, ctx context.Context, email string) (user *User, err error) {
-	err = db.WithContext(ctx).Model(&User{}).Where(&User{Email: email}).First(&user).Error
+func GetByEmail(ctx context.Context, email string) (user *User, err error) {
+	err = mysql.DB.WithContext(ctx).Model(&User{}).Where(&User{Email: email}).First(&user).Error
 	println(user)
 	return
 }
 
-func Create(db *gorm.DB, ctx context.Context, user *User) error {
-	return db.WithContext(ctx).Create(user).Error
+func Create(ctx context.Context, user *User) (err error) {
+	return mysql.DB.WithContext(ctx).Create(user).Error
 }
 
 func CreateUsers(users []User) error {

@@ -29,6 +29,16 @@ func (x *RegisterReq) FastRead(buf []byte, _type int8, number int32) (offset int
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -54,6 +64,16 @@ func (x *RegisterReq) fastReadField2(buf []byte, _type int8) (offset int, err er
 
 func (x *RegisterReq) fastReadField3(buf []byte, _type int8) (offset int, err error) {
 	x.ConfirmPassword, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterReq) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.Username, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *RegisterReq) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	x.Telephone, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -249,6 +269,8 @@ func (x *RegisterReq) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
 	return offset
 }
 
@@ -273,6 +295,22 @@ func (x *RegisterReq) fastWriteField3(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteString(buf[offset:], 3, x.GetConfirmPassword())
+	return offset
+}
+
+func (x *RegisterReq) fastWriteField4(buf []byte) (offset int) {
+	if x.Username == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetUsername())
+	return offset
+}
+
+func (x *RegisterReq) fastWriteField5(buf []byte) (offset int) {
+	if x.Telephone == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 5, x.GetTelephone())
 	return offset
 }
 
@@ -417,6 +455,8 @@ func (x *RegisterReq) Size() (n int) {
 	n += x.sizeField1()
 	n += x.sizeField2()
 	n += x.sizeField3()
+	n += x.sizeField4()
+	n += x.sizeField5()
 	return n
 }
 
@@ -441,6 +481,22 @@ func (x *RegisterReq) sizeField3() (n int) {
 		return n
 	}
 	n += fastpb.SizeString(3, x.GetConfirmPassword())
+	return n
+}
+
+func (x *RegisterReq) sizeField4() (n int) {
+	if x.Username == "" {
+		return n
+	}
+	n += fastpb.SizeString(4, x.GetUsername())
+	return n
+}
+
+func (x *RegisterReq) sizeField5() (n int) {
+	if x.Telephone == "" {
+		return n
+	}
+	n += fastpb.SizeString(5, x.GetTelephone())
 	return n
 }
 
@@ -582,6 +638,8 @@ var fieldIDToName_RegisterReq = map[int32]string{
 	1: "Email",
 	2: "Password",
 	3: "ConfirmPassword",
+	4: "Username",
+	5: "Telephone",
 }
 
 var fieldIDToName_RegisterResp = map[int32]string{

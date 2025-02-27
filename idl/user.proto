@@ -14,6 +14,8 @@ message RegisterReq {
     string email = 1;
     string password = 2;
     string confirm_password = 3;
+    string username = 4;
+    string telephone = 5;
 }
 
 message RegisterResp {

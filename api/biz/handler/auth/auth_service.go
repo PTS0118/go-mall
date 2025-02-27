@@ -22,7 +22,7 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := &common.Empty{}
+	resp := &auth.RegisterResp{}
 	resp, err = service.NewRegisterService(ctx, c).Run(&req)
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
@@ -43,7 +43,7 @@ func Login(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	resp := &common.Empty{}
+	resp := &auth.Empty{}
 	resp, err = service.NewLoginService(ctx, c).Run(&req)
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)

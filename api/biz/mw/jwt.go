@@ -20,7 +20,7 @@ var (
 	IdentityKey = "uid"
 )
 
-func Init() {
+func JWTInit() {
 	var err error
 	JwtMiddle, err = jwt.New(&jwt.HertzJWTMiddleware{
 		Realm:         "hertz jwt",
@@ -52,12 +52,12 @@ func Init() {
 			if len(users) == 0 {
 				return nil, errors.New("user already exists or wrong password")
 			}
-			fmt.Println(&users[0])
 			return &model.User{
 				Base:     model.Base{Id: users[0].Base.Id},
-				UserName: users[0].UserName,
+				Username: users[0].Username,
 				Email:    users[0].Email,
 				Password: users[0].Password,
+				Role:     users[0].Role,
 			}, nil
 		},
 		IdentityKey: IdentityKey,
@@ -66,12 +66,15 @@ func Init() {
 			idFloat := claims[IdentityKey].(float64)
 			return &model.User{
 				Base: model.Base{Id: int(idFloat)},
+				Role: claims["role"].(string),
 			}
 		},
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*model.User); ok {
+				fmt.Printf("role:%+v", v)
 				return jwt.MapClaims{
 					IdentityKey: v.Base.Id,
+					"role":      v.Role,
 				}
 			}
 			return jwt.MapClaims{}

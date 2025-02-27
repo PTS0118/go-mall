@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package  base;
+
+option go_package = "/base";
+
+service CheckoutService {
+  //订单定时取消
+  rpc Checkout(CheckoutReq) returns (CheckoutResp) {}
+
+  //支付定时取消
+}
+
+//

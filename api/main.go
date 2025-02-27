@@ -7,6 +7,7 @@ import (
 	"github.com/PTS0118/go-mall/api/biz/dal"
 	"github.com/PTS0118/go-mall/api/biz/mw"
 	"github.com/PTS0118/go-mall/api/infra/rpc"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/hertz-contrib/swagger"
 	swaggerFiles "github.com/swaggo/files"
 	"time"
@@ -32,10 +33,16 @@ func main() {
 	// init dal
 	dal.Init()
 	rpc.InitClient()
-	mw.Init()
+	mw.JWTInit()
 	address := conf.GetConf().Hertz.Address
 	h := server.New(server.WithHostPorts(address))
-
+	// 注册中间件（确保 enforcer 已正确创建）
+	_, err := mw.InitCasbin()
+	if err != nil {
+		klog.Error("初始化Casbin失败")
+		klog.Error(err)
+		return
+	}
 	registerMiddleware(h)
 
 	// add a ping route to test
@@ -44,7 +51,6 @@ func main() {
 	})
 
 	router.GeneratedRegister(h)
-
 	h.Spin()
 }
 
