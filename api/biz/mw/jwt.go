@@ -129,7 +129,7 @@ func JWTInit() {
 				tokenKey := "token_" + userID
 				// 将token加入黑名单
 				if err := redis.RedisClient.SetEx(ctx, tokenKey, "", 1*time.Second).Err(); err != nil {
-					klog.Info("Redis 设置过期失败: %v", err)
+					klog.Info("Redis 设置过期失败: {}", err)
 				}
 			}
 			c.JSON(http.StatusOK, map[string]interface{}{
