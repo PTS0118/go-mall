@@ -17,7 +17,7 @@ import (
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
 func Register(r *server.Hertz) {
 
-	root := r.Group("/a/cart", mw.JwtMiddle.MiddlewareFunc())
+	root := r.Group("/a/cart", mw.JwtMiddle.MiddlewareFunc(),mw.CasbinMiddleware())
 	root.POST("/add", append(_addcartitemMw(), cart.AddCartItem)...)
 	root.POST("/empty", append(_emptycartMw(), cart.EmptyCart)...)
 	root.GET("/get", append(_getcartMw(), cart.GetCart)...)

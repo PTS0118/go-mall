@@ -4,7 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/PTS0118/go-mall/api/biz/dal/redis"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/PTS0118/go-mall/api/biz/model"
@@ -30,6 +34,21 @@ func JWTInit() {
 		TokenLookup:   "header: Authorization, query: token, cookie: jwt",
 		TokenHeadName: "Bearer",
 		LoginResponse: func(ctx context.Context, c *app.RequestContext, code int, token string, expire time.Time) {
+			// 设置token到redis
+			// 从 Payload 中解析用户 ID
+			parsedToken, err := JwtMiddle.ParseTokenString(token)
+			if err != nil {
+				klog.Info("Token 解析失败: %v", err)
+			} else {
+				claims := jwt.ExtractClaimsFromToken(parsedToken)
+				userID := claims[IdentityKey].(string)
+				tokenKey := "token_" + userID
+				// 存储到 Redis
+				if err := redis.RedisClient.SetEx(ctx, tokenKey, token, 3600*time.Second).Err(); err != nil {
+					klog.Info("Redis 存储失败: %v", err)
+				}
+			}
+
 			c.JSON(http.StatusOK, utils.H{
 				"code":    code,
 				"token":   token,
@@ -52,6 +71,7 @@ func JWTInit() {
 			if len(users) == 0 {
 				return nil, errors.New("user already exists or wrong password")
 			}
+
 			return &model.User{
 				Base:     model.Base{Id: users[0].Base.Id},
 				Username: users[0].Username,
@@ -62,18 +82,25 @@ func JWTInit() {
 		},
 		IdentityKey: IdentityKey,
 		IdentityHandler: func(ctx context.Context, c *app.RequestContext) interface{} {
+			// 验证token是否还在redis (不在说明已经登出,token不一致表示已经重新登录了)
+			token := jwt.GetToken(ctx, c)
 			claims := jwt.ExtractClaims(ctx, c)
-			idFloat := claims[IdentityKey].(float64)
+			idFloat := claims[IdentityKey].(string)
+			tokenKey := "token_" + idFloat
+			if ok, _ := ValidateToken(tokenKey, token, ctx); !ok {
+				c.AbortWithStatusJSON(401, utils.H{"error": "Token已失效，请重新登录"})
+			}
+			userId, _ := strconv.Atoi(idFloat)
 			return &model.User{
-				Base: model.Base{Id: int(idFloat)},
+				Base: model.Base{Id: userId},
 				Role: claims["role"].(string),
 			}
 		},
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			if v, ok := data.(*model.User); ok {
-				fmt.Printf("role:%+v", v)
+				//fmt.Printf("role:%+v", v)
 				return jwt.MapClaims{
-					IdentityKey: v.Base.Id,
+					IdentityKey: strconv.Itoa(v.Base.Id),
 					"role":      v.Role,
 				}
 			}
@@ -89,8 +116,46 @@ func JWTInit() {
 				"message": message,
 			})
 		},
+		LogoutResponse: func(ctx context.Context, c *app.RequestContext, code int) {
+			//获取到token
+			authHeader := c.GetHeader("Authorization")
+			token := strings.TrimPrefix(string(authHeader), "Bearer ")
+			parsedToken, err := JwtMiddle.ParseTokenString(token)
+			if err != nil {
+				klog.Info("Token 解析失败: {}", err)
+			} else {
+				claims := jwt.ExtractClaimsFromToken(parsedToken)
+				userID := claims[IdentityKey].(string)
+				tokenKey := "token_" + userID
+				// 将token加入黑名单
+				if err := redis.RedisClient.SetEx(ctx, tokenKey, "", 1*time.Second).Err(); err != nil {
+					klog.Info("Redis 设置过期失败: %v", err)
+				}
+			}
+			c.JSON(http.StatusOK, map[string]interface{}{
+				"code": http.StatusOK,
+			})
+		},
 	})
 	if err != nil {
 		panic(err)
 	}
+}
+
+func ValidateToken(tokenKey string, targetToken string, ctx context.Context) (bool, error) {
+	// 1. 获取 Redis 值
+	val, err := redis.RedisClient.Get(ctx, tokenKey).Result()
+
+	// 2. 处理键不存在的情况
+	if err != nil {
+		return false, fmt.Errorf("Redis 查询失败: %v", err) // 其他错误（如连接问题）
+	}
+
+	// 3. 判断值是否为空字符串
+	if val == "" {
+		return false, nil
+	}
+
+	// 4. 验证值是否与目标 Token 一致
+	return val == targetToken, nil
 }

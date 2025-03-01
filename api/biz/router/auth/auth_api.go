@@ -17,7 +17,7 @@ import (
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
 func Register(r *server.Hertz) {
 	r.POST("/register", auth.Register)
-	r.POST("/logout", auth.Logout)
+	r.POST("/logout", mw.JwtMiddle.LogoutHandler)
 	r.POST("/login", mw.JwtMiddle.LoginHandler)
 	_ = r.Group("/a", mw.JwtMiddle.MiddlewareFunc())
 
