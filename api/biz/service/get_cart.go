@@ -40,12 +40,16 @@ func (h *GetCartService) Run(req *cart.Empty) (resp *cart.GetCartResp, err error
 		return resp, nil // 或者返回一个适当的错误信息
 	} else {
 		log.Printf("items length 1: %d", data.Size())
+		for key, value := range data.GetItems() {
+			log.Printf("key: %d, value: %+v", key, value)
+		}
 	}
-	for i := 0; i < data.Size(); i++ {
-		log.Printf("test %d", data.GetItems()[i].GetProductId())
+	for i := 0; i < len(data.GetItems()); i++ {
+
 		product, err := rpc.ProductClient.GetProduct(h.Context, &rpcproduct.GetProductReq{
 			Id: int32(data.GetItems()[i].GetProductId()),
 		})
+		log.Printf("test %+v", product)
 		if err == nil {
 			items[i] = &cart.CartItem{
 				ProductId:   data.GetItems()[i].GetProductId(),
