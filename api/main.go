@@ -4,13 +4,15 @@ package main
 
 import (
 	"context"
+	"time"
+
 	"github.com/PTS0118/go-mall/api/biz/dal"
 	"github.com/PTS0118/go-mall/api/biz/mw"
+	_ "github.com/PTS0118/go-mall/api/docs"
 	"github.com/PTS0118/go-mall/api/infra/rpc"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/hertz-contrib/swagger"
 	swaggerFiles "github.com/swaggo/files"
-	"time"
 
 	"github.com/PTS0118/go-mall/api/biz/router"
 	"github.com/PTS0118/go-mall/api/conf"

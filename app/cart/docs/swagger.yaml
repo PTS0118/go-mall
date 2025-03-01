@@ -1,0 +1,26 @@
+info:
+  contact: {}
+paths:
+  /a/cart/add:
+    post:
+      parameters:
+      - description: User ID
+        in: formData
+        name: UserId
+        required: true
+        type: integer
+      - description: User ID
+        in: formData
+        name: ProductId
+        required: true
+        type: integer
+      - description: User ID
+        in: formData
+        name: Count
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses: {}
+      summary: add product to cart
+swagger: "2.0"

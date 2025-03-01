@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/PTS0118/go-mall/app/cart/biz/dal/mysql"
-	"gorm.io/gorm"
 )
 
 type Cart struct {
@@ -18,13 +17,13 @@ func (p Cart) TableName() string {
 	return "cart"
 }
 
-func (p *Cart) BeforeDelete(tx *gorm.DB) (err error) {
-	if p.Base.IsDel == 0 {
-		p.IsDel = 1
-		return tx.Save(p).Error // 更新 is_del 字段而不实际删除记录
-	}
-	return nil
-}
+// func (p *Cart) BeforeDelete(tx *gorm.DB) (err error) {
+// 	if p.Base.IsDel == 0 {
+// 		p.IsDel = 1
+// 		return tx.Save(p).Error // 更新 is_del 字段而不实际删除记录
+// 	}
+// 	return nil
+// }
 
 // 创建商品
 func CreateProduct(ctx context.Context, p *Cart) (id int32, err error) {
@@ -34,7 +33,7 @@ func CreateProduct(ctx context.Context, p *Cart) (id int32, err error) {
 
 // 删除商品
 func DeleteProduct(ctx context.Context, id int32) (err error) {
-	result := mysql.DB.Where("id = ?", id).Delete(&Cart{})
+	result := mysql.DB.Where("user_id = ?", id).Delete(&Cart{})
 	return result.Error
 }
 

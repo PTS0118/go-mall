@@ -21,6 +21,15 @@ func NewGetCartService(Context context.Context, RequestContext *app.RequestConte
 	return &GetCartService{RequestContext: RequestContext, Context: Context}
 }
 
+// @Summary 获取购物车内容
+// @Description 通过RPC调用获取购物车内容
+// @Tags Cart
+// @Accept json
+// @Produce json
+// @Param req body cart.Empty true "获取购物车请求"
+// @Success 200 {object} cart.GetCartResp "成功响应"
+// @Failure 400 {object} cart.GetCartResp "请求参数错误"
+// @Router /cart/get [post]
 func (h *GetCartService) Run(req *cart.Empty) (resp *cart.GetCartResp, err error) {
 	//判断参数是否为nil
 	if req == nil {
@@ -33,14 +42,14 @@ func (h *GetCartService) Run(req *cart.Empty) (resp *cart.GetCartResp, err error
 	data, err := rpc.CartClient.GetCart(h.Context, &rpccart.GetCartReq{
 		UserId: req.UserId,
 	})
-	items := make([]*cart.CartItem, data.Size())
+	items := make([]*cart.CartItem, len(data.Items))
 	// 检查 items 是否为空
 	if data.Size() == 0 {
 		log.Printf("items length: %d", data.Size())
 		return resp, nil // 或者返回一个适当的错误信息
 	} else {
 		log.Printf("items length 1: %d", data.Size())
-		for key, value := range data.GetItems() {
+		for key, value := range data.Items {
 			log.Printf("key: %d, value: %+v", key, value)
 		}
 	}
@@ -49,7 +58,7 @@ func (h *GetCartService) Run(req *cart.Empty) (resp *cart.GetCartResp, err error
 		product, err := rpc.ProductClient.GetProduct(h.Context, &rpcproduct.GetProductReq{
 			Id: int32(data.GetItems()[i].GetProductId()),
 		})
-		log.Printf("test %+v", product)
+		log.Printf("product %+v", product)
 		if err == nil {
 			items[i] = &cart.CartItem{
 				ProductId:   data.GetItems()[i].GetProductId(),

@@ -19,6 +19,15 @@ func NewPlaceOrderService(Context context.Context, RequestContext *app.RequestCo
 	return &PlaceOrderService{RequestContext: RequestContext, Context: Context}
 }
 
+// @Summary 下单
+// @Description 通过RPC调用下单
+// @Tags Order
+// @Accept json
+// @Produce json
+// @Param req body order.PlaceOrderReq true "下单请求"
+// @Success 200 {object} order.PlaceOrderResp "成功响应"
+// @Failure 400 {object} order.PlaceOrderResp "请求参数错误"
+// @Router /order/place [post]
 func (h *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrderResp, err error) {
 	//校验参数
 	if req == nil {

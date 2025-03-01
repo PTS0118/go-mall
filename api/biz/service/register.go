@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	auth "github.com/PTS0118/go-mall/api/hertz_gen/api/auth"
 	"github.com/PTS0118/go-mall/api/infra/rpc"
 	rpcuser "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/user"
@@ -17,6 +18,15 @@ func NewRegisterService(Context context.Context, RequestContext *app.RequestCont
 	return &RegisterService{RequestContext: RequestContext, Context: Context}
 }
 
+// @Summary 用户注册
+// @Description 通过RPC调用用户注册
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param req body auth.RegisterReq true "用户注册请求"
+// @Success 200 {object} auth.RegisterResp "成功响应"
+// @Failure 400 {object} auth.RegisterResp "请求参数错误"
+// @Router /auth/register [post]
 func (h *RegisterService) Run(req *auth.RegisterReq) (resp *auth.RegisterResp, err error) {
 	if req == nil {
 		return &auth.RegisterResp{
