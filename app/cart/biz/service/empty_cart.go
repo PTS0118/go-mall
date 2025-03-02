@@ -17,7 +17,7 @@ func NewEmptyCartService(ctx context.Context) *EmptyCartService {
 
 // Run create note info
 func (s *EmptyCartService) Run(req *cart.EmptyCartReq) (resp *cart.EmptyCartResp, err error) {
-	err = model.DeleteProduct(s.ctx, int32(req.UserId))
+	err = model.DeleteCart(s.ctx, int32(req.UserId))
 	if err != nil {
 		resp = &cart.EmptyCartResp{
 			Code:    0,

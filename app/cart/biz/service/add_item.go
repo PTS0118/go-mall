@@ -28,11 +28,11 @@ func (s *AddItemService) Run(req *cart.AddItemReq) (resp *cart.AddItemResp, err 
 		ProductId: req.ProductId,
 		Count:     req.Count,
 	}
-	id, err := model.CreateProduct(s.ctx, param)
+	err = model.AddOrUpdateCart(s.ctx, param)
 	if err != nil {
 		resp = &cart.AddItemResp{
 			Code:    0,
-			Message: fmt.Sprintf("购物车添加商品成功：%v", id),
+			Message: fmt.Sprintf("购物车添加商品失败"),
 		}
 		klog.Error("购物车添加商品失败：%v", err)
 	} else {
