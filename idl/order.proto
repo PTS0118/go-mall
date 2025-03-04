@@ -63,6 +63,7 @@ message ListOrderResp {
 message MarkOrderPaidReq {
   uint32 user_id = 1;
   string order_id = 2;
+  int32 status = 3;
 }
 
 message MarkOrderPaidResp {
@@ -83,3 +84,5 @@ message UpdateOrderResp {
   int32 code = 1; //0-成功 其他值失败
   string message = 2;
 }
+
+

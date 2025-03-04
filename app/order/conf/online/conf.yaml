@@ -21,3 +21,7 @@ redis:
   username: ""
   password: ""
   db: 0
+
+kafka:
+  address:
+    - 127.0.0.1:19092

@@ -44,3 +44,4 @@ message GetUserResp {
     string username = 3;
     string telephone = 4;
 }
+

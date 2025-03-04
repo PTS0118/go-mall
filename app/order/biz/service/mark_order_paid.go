@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/PTS0118/go-mall/app/order/biz/model"
 	order "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/order"
 )
 
@@ -14,7 +15,17 @@ func NewMarkOrderPaidService(ctx context.Context) *MarkOrderPaidService {
 
 // Run create note info
 func (s *MarkOrderPaidService) Run(req *order.MarkOrderPaidReq) (resp *order.MarkOrderPaidResp, err error) {
-	// Finish your business logic.
+	// 修改订单状态
+	err = model.MarkOrderStatus(int(req.Status), req.OrderId)
+	if err != nil {
+		return &order.MarkOrderPaidResp{
+			Code:    -1,
+			Message: "修改失败",
+		}, err
+	}
 
-	return
+	return &order.MarkOrderPaidResp{
+		Code:    0,
+		Message: "修改成功",
+	}, err
 }

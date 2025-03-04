@@ -359,6 +359,11 @@ func (x *MarkOrderPaidReq) FastRead(buf []byte, _type int8, number int32) (offse
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -379,6 +384,11 @@ func (x *MarkOrderPaidReq) fastReadField1(buf []byte, _type int8) (offset int, e
 
 func (x *MarkOrderPaidReq) fastReadField2(buf []byte, _type int8) (offset int, err error) {
 	x.OrderId, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *MarkOrderPaidReq) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.Status, offset, err = fastpb.ReadInt32(buf, _type)
 	return offset, err
 }
 
@@ -778,6 +788,7 @@ func (x *MarkOrderPaidReq) FastWrite(buf []byte) (offset int) {
 	}
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
 	return offset
 }
 
@@ -794,6 +805,14 @@ func (x *MarkOrderPaidReq) fastWriteField2(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteString(buf[offset:], 2, x.GetOrderId())
+	return offset
+}
+
+func (x *MarkOrderPaidReq) fastWriteField3(buf []byte) (offset int) {
+	if x.Status == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt32(buf[offset:], 3, x.GetStatus())
 	return offset
 }
 
@@ -1160,6 +1179,7 @@ func (x *MarkOrderPaidReq) Size() (n int) {
 	}
 	n += x.sizeField1()
 	n += x.sizeField2()
+	n += x.sizeField3()
 	return n
 }
 
@@ -1176,6 +1196,14 @@ func (x *MarkOrderPaidReq) sizeField2() (n int) {
 		return n
 	}
 	n += fastpb.SizeString(2, x.GetOrderId())
+	return n
+}
+
+func (x *MarkOrderPaidReq) sizeField3() (n int) {
+	if x.Status == 0 {
+		return n
+	}
+	n += fastpb.SizeInt32(3, x.GetStatus())
 	return n
 }
 
@@ -1325,6 +1353,7 @@ var fieldIDToName_ListOrderResp = map[int32]string{
 var fieldIDToName_MarkOrderPaidReq = map[int32]string{
 	1: "UserId",
 	2: "OrderId",
+	3: "Status",
 }
 
 var fieldIDToName_MarkOrderPaidResp = map[int32]string{

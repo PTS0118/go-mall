@@ -8,10 +8,11 @@ import (
 type Product struct {
 	Base
 	Name        string  `json:"name" column:"name"`
-	Description string  `json:"description" column:"description"`
+	Description string  `json:"description" column:"descriptison"`
 	Picture     string  `json:"picture" column:"picture"`
 	Price       float32 `json:"price" column:"price"`
 	Categories  string  `json:"categories" column:"categories"` // 使用切片定义 categories
+	Stock       int     `json:"stock" column:"stock"`
 }
 
 func (p Product) TableName() string {

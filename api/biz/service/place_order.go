@@ -6,6 +6,7 @@ import (
 	order "github.com/PTS0118/go-mall/api/hertz_gen/api/order"
 	"github.com/PTS0118/go-mall/api/infra/rpc"
 	rpcorder "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/order"
+	rpcproduct "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/product"
 	rpcuser "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/user"
 	"github.com/cloudwego/hertz/pkg/app"
 )
@@ -42,6 +43,19 @@ func (h *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 		}
 		return resp, err
 	}
+	//判断是否还有库存
+	for _, value := range req.OrderItems {
+		productData, _ := rpc.ProductClient.GetProduct(h.Context, &rpcproduct.GetProductReq{Id: value.ProductId})
+		if productData.Product.Stock < value.Count {
+			resp = &order.PlaceOrderResp{
+				StatusCode: -1,
+				StatusMsg:  "下单失败（商品：" + productData.Product.Name + " 库存不足）",
+				OrderId:    "",
+			}
+			return resp, err
+		}
+	}
+
 	//构建订单项对象
 	orderItems := make([]*rpcorder.OrderItem, len(req.OrderItems))
 	for key, value := range req.OrderItems {

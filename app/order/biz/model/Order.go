@@ -37,8 +37,20 @@ func UpdateOrder(ctx context.Context, p *Order) (err error) {
 	return result.Error
 }
 
+// 查找订单
+func GetOrder(ctx context.Context, orderId string) (order *Order, err error) {
+	result := mysql.DB.Where(&Order{Base: Base{IsDel: 0}, OrderId: orderId}).First(&order)
+	return order, result.Error
+}
+
 // 查找订单列表
 func ListOrders(ctx context.Context, userId int) (orders []*Order, err error) {
 	result := mysql.DB.Where(&Order{Base: Base{IsDel: 0}, UserId: userId}).Find(&orders)
 	return orders, result.Error
+}
+
+// 设置订单状态
+func MarkOrderStatus(status int, orderId string) (err error) {
+	result := mysql.DB.Model(&Order{}).Where("order_id = ?", orderId).Update("status", status)
+	return result.Error
 }

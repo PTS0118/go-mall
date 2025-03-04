@@ -62,6 +62,7 @@ message ListOrderResp {
 message MarkOrderPaidReq {
   uint32 user_id = 1[(api.body) = "userId"];
   string order_id = 2[(api.body) = "orderId"];
+  string status = 3[(api.body) = "status"];
 }
 
 message MarkOrderPaidResp {

@@ -2,10 +2,14 @@ package service
 
 import (
 	"context"
+	"github.com/IBM/sarama"
+	"github.com/PTS0118/go-mall/app/order/biz/dal/kafka"
 	"github.com/PTS0118/go-mall/app/order/biz/dal/mysql"
 	"github.com/PTS0118/go-mall/app/order/biz/model"
 	"github.com/PTS0118/go-mall/app/order/biz/utils"
 	order "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/order"
+	"github.com/cloudwego/kitex/pkg/klog"
+	"time"
 )
 
 type PlaceOrderService struct {
@@ -93,5 +97,21 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 		Message: "创建订单成功",
 		OrderId: orderId,
 	}
+
+	// 发送消息到kafka延迟队列，实现定时订单未支付取消
+	msg := &sarama.ProducerMessage{
+		Topic:     kafka.DelayTopic,
+		Timestamp: time.Now(),
+		Key:       sarama.StringEncoder(orderId),
+		Value:     sarama.StringEncoder(orderId),
+	}
+	klog.Info("kafka 准备发送消息, message:", msg)
+	_, _, err = kafka.KafkaDelayQueue.SendMessage(msg)
+	if err != nil {
+		klog.Info("kafka 发送消息到延时队列失败, error:{}", err)
+	} else {
+		klog.Info("kafka 发送消息成功, message:", msg)
+	}
+
 	return resp, err
 }

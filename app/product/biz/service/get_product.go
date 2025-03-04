@@ -72,6 +72,7 @@ func (s *GetProductService) Run(req *product.GetProductReq) (resp *product.GetPr
 				Picture:     data.Picture,
 				Price:       data.Price,
 				Categories:  categoryList,
+				Stock:       int32(data.Stock),
 			},
 		}
 	}

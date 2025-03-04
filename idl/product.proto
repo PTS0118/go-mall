@@ -23,6 +23,7 @@ message Product {
   string description = 3;
   string picture = 4;
   float price = 5;
+  int32 stock = 7;
   repeated string categories = 6;
 }
 

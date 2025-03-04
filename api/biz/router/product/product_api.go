@@ -4,7 +4,6 @@ package product
 
 import (
 	product "github.com/PTS0118/go-mall/api/biz/handler/product"
-	"github.com/PTS0118/go-mall/api/biz/mw"
 	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
@@ -17,10 +16,7 @@ import (
 // Register register routes based on the IDL 'api.${HTTP Method}' annotation.
 func Register(r *server.Hertz) {
 
-	//root := r.Group("/a", rootMw()...)
-	// 添加/a路由分组为JWT权限管控分组路由
-	root := r.Group("/a/product", mw.JwtMiddle.MiddlewareFunc(),mw.CasbinMiddleware(),mw.CustomLimiter(5,1))
-
+	root := r.Group("/", rootMw()...)
 	root.POST("/create", append(_createproductMw(), product.CreateProduct)...)
 	root.DELETE("/delete", append(_deleteproductMw(), product.DeleteProduct)...)
 	root.POST("/list", append(_listproductsMw(), product.ListProducts)...)

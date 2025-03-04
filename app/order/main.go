@@ -29,6 +29,7 @@ func main() {
 	if err != nil {
 		klog.Error(err.Error())
 	}
+
 }
 
 func kitexInit() (opts []server.Option) {
