@@ -12,6 +12,9 @@ import (
 
 // AddCartItem .
 // @router /add [POST]
+// PingHandler 测试handler
+// @Summary 测试Summary
+// @Description 测试Description
 func AddCartItem(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req cart.AddCartReq
@@ -64,6 +67,8 @@ func EmptyCart(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp := &cart.EmptyCartResp{}
+	//设置用户ID
+	req.UserId = uint32(utils.GetUserId(c))
 	resp, err = service.NewEmptyCartService(ctx, c).Run(&req)
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	product "github.com/PTS0118/go-mall/api/hertz_gen/api/product"
 	rpc "github.com/PTS0118/go-mall/api/infra/rpc"
 	rpcproduct "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/product"
@@ -17,6 +18,15 @@ func NewDeleteProductService(Context context.Context, RequestContext *app.Reques
 	return &DeleteProductService{RequestContext: RequestContext, Context: Context}
 }
 
+// @Summary 删除商品
+// @Description 通过RPC调用删除商品
+// @Tags Product
+// @Accept json
+// @Produce json
+// @Param req body product.DeleteProductReq true "删除商品请求"
+// @Success 200 {object} product.DeleteProductResp "成功响应"
+// @Failure 400 {object} product.DeleteProductResp "请求参数错误"
+// @Router /product/delete [post]
 func (h *DeleteProductService) Run(req *product.DeleteProductReq) (resp *product.DeleteProductResp, err error) {
 	//判断参数是否为nil
 	if req == nil {

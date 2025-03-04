@@ -3,7 +3,7 @@ services:
   mysql:
     image: 'mysql:latest'
     ports:
-      - 3306:3306
+      - 3307:3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
@@ -11,11 +11,11 @@ services:
   redis:
     image: 'redis:latest'
     ports:
-      - 6379:6379
+      - 6380:6379
   consul:
     image: "hashicorp/consul:latest"
     ports:
-      - "8500:8500"
+      - "8501:8500"
     environment:
       CONSUL_BIND_INTERFACE: eth0
   # Jaeger
@@ -23,9 +23,9 @@ services:
     container_name: jaeger-all-in-one
     image: jaegertracing/all-in-one:latest
     ports:
-      - "16686:16686"
-      - "4317:4317"
-      - "4318:4318"
+      - "16687:16686"
+      - "4318:4317"
+      - "4319:4318"
   prometheus:
     image: prom/prometheus:latest
     volumes:
@@ -33,19 +33,19 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
-      - "9090:9090"
+      - "9091:9090"
   etcd:
     image: docker.io/bitnami/etcd:3.5
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
     ports:
-      - 2379:2379
-      - 2380:2380
+      - 2380:2379
+      - 2381:2380
   nats:
     image: nats:latest
     ports:
-      - "4222:4222"
-      - "8222:8222"
+      - "4223:4222"
+      - "8223:8222"
 
   grafana:
     image: grafana/grafana:latest
@@ -62,7 +62,7 @@ services:
       - ./deploy/config/loki.yml:/etc/loki/local-config.yaml
     command: -config.file=/etc/loki/local-config.yaml
     ports:
-      - "3100:3100"
+      - "3101:3100"
 
   promtail:
     image: grafana/promtail:2.9.2

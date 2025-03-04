@@ -18,6 +18,15 @@ func NewAddCartItemService(Context context.Context, RequestContext *app.RequestC
 	return &AddCartItemService{RequestContext: RequestContext, Context: Context}
 }
 
+// @Summary 添加商品到购物车
+// @Description 通过RPC调用添加商品到购物车
+// @Tags Cart
+// @Accept json
+// @Produce json
+// @Param req body cart.AddCartReq true "添加购物车请求"
+// @Success 200 {object} cart.AddCartResp "成功响应"
+// @Failure 400 {object} cart.AddCartResp "请求参数错误"
+// @Router /cart/add [post]
 func (h *AddCartItemService) Run(req *cart.AddCartReq) (resp *cart.AddCartResp, err error) {
 	//判断参数是否为nil
 	if req == nil {

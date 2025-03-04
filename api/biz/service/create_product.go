@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	product "github.com/PTS0118/go-mall/api/hertz_gen/api/product"
 	"github.com/PTS0118/go-mall/api/infra/rpc"
 	rpcproduct "github.com/PTS0118/go-mall/rpc_gen/kitex_gen/product"
@@ -17,6 +18,15 @@ func NewCreateProductService(Context context.Context, RequestContext *app.Reques
 	return &CreateProductService{RequestContext: RequestContext, Context: Context}
 }
 
+// @Summary 创建商品
+// @Description 通过RPC调用创建商品
+// @Tags Product
+// @Accept json
+// @Produce json
+// @Param req body product.CreateProductReq true "创建商品请求"
+// @Success 200 {object} product.CreateProductResp "成功响应"
+// @Failure 400 {object} product.CreateProductResp "请求参数错误"
+// @Router /product/create [post]
 func (h *CreateProductService) Run(req *product.CreateProductReq) (resp *product.CreateProductResp, err error) {
 	//判断参数是否为nil
 	if req == nil {

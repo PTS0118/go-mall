@@ -16,18 +16,23 @@ func NewAddItemService(ctx context.Context) *AddItemService {
 	return &AddItemService{ctx: ctx}
 }
 
-// Run create note info
+// @Summary      add product to cart
+// @Produce      json
+// @Param        UserId   formData  int  true  "User ID"
+// @Param        ProductId   formData  int  true  "User ID"
+// @Param        Count   formData  int  true  "User ID"
+// @Router       /a/cart/add [post]
 func (s *AddItemService) Run(req *cart.AddItemReq) (resp *cart.AddItemResp, err error) {
 	param := &model.Cart{
 		UserId:    req.UserId,
 		ProductId: req.ProductId,
 		Count:     req.Count,
 	}
-	id, err := model.CreateProduct(s.ctx, param)
+	err = model.AddOrUpdateCart(s.ctx, param)
 	if err != nil {
 		resp = &cart.AddItemResp{
 			Code:    0,
-			Message: fmt.Sprintf("购物车添加商品成功：%v", id),
+			Message: fmt.Sprintf("购物车添加商品失败"),
 		}
 		klog.Error("购物车添加商品失败：%v", err)
 	} else {

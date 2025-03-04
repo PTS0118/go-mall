@@ -1,6 +1,33 @@
+definitions:
+  cart.AddCartReq:
+    properties:
+      count:
+        type: integer
+      productId:
+        type: integer
+      userId:
+        type: integer
+    type: object
+  cart.AddCartResp:
+    properties:
+      status_code:
+        description: 0表示成功
+        type: integer
+      status_msg:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
+  /a/create:
+    post:
+      consumes:
+      - application/json
+      description: 创建商品
+      produces:
+      - application/json
+      responses: {}
+      summary: 创建商品
   /a/product:
     get:
       consumes:
@@ -10,6 +37,11 @@ paths:
       - application/json
       responses: {}
       summary: 获取商品
+  /add:
+    post:
+      description: 测试Description
+      responses: {}
+      summary: 测试Summary
   /auth/login:
     post:
       responses: {}
@@ -19,13 +51,50 @@ paths:
   /auth/register:
     post:
       responses: {}
-  /create:
+  /cart/add:
     post:
-      responses: {}
+      consumes:
+      - application/json
+      description: 通过RPC调用添加商品到购物车
+      parameters:
+      - description: 添加购物车请求
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/cart.AddCartReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/cart.AddCartResp'
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/cart.AddCartResp'
+      summary: 添加商品到购物车
+      tags:
+      - Cart
   /delete:
     delete:
       responses: {}
+  /empty:
+    post:
+      responses: {}
+  /get:
+    get:
+      responses: {}
   /list:
+    get:
+      responses: {}
+    post:
+      responses: {}
+  /markPaid:
+    post:
+      responses: {}
+  /place:
     post:
       responses: {}
   /search:

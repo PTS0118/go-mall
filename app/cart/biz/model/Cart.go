@@ -18,28 +18,55 @@ func (p Cart) TableName() string {
 	return "cart"
 }
 
-func (p *Cart) BeforeDelete(tx *gorm.DB) (err error) {
-	if p.Base.IsDel == 0 {
-		p.IsDel = 1
-		return tx.Save(p).Error // 更新 is_del 字段而不实际删除记录
-	}
-	return nil
-}
+// func (p *Cart) BeforeDelete(tx *gorm.DB) (err error) {
+// 	if p.Base.IsDel == 0 {
+// 		p.IsDel = 1
+// 		return tx.Save(p).Error // 更新 is_del 字段而不实际删除记录
+// 	}
+// 	return nil
+// }
 
 // 创建商品
-func CreateProduct(ctx context.Context, p *Cart) (id int32, err error) {
-	result := mysql.DB.Create(&p)
-	return p.Id, result.Error
+func AddOrUpdateCart(ctx context.Context, p *Cart) (err error) {
+	tx := mysql.DB.Begin()
+	if tx.Error != nil {
+		return tx.Error
+	}
+
+	// 查询商品是否存在
+	var existingCart Cart
+	if err := tx.Where("user_id = ? AND product_id = ?", p.UserId, p.ProductId).First(&existingCart).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			// 商品不存在，插入新记录
+			if err := tx.Create(p).Error; err != nil {
+				tx.Rollback()
+				return err
+			}
+		} else {
+			tx.Rollback()
+			return err
+		}
+	} else {
+		// 商品存在，更新记录
+		existingCart.Count += p.Count
+		if err := tx.Save(&existingCart).Error; err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	// 提交事务
+	return tx.Commit().Error
 }
 
 // 删除商品
-func DeleteProduct(ctx context.Context, id int32) (err error) {
-	result := mysql.DB.Where("id = ?", id).Delete(&Cart{})
+func DeleteCart(ctx context.Context, id int32) (err error) {
+	result := mysql.DB.Where("user_id = ?", id).Delete(&Cart{})
 	return result.Error
 }
 
 // 更新商品
-func UpdateProduct(ctx context.Context, p *Cart) (err error) {
+func UpdateCart(ctx context.Context, p *Cart) (err error) {
 	result := mysql.DB.Save(&Cart{})
 	return result.Error
 }

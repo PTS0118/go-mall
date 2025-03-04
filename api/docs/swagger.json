@@ -4,6 +4,19 @@
         "contact": {}
     },
     "paths": {
+        "/a/create": {
+            "post": {
+                "description": "创建商品",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "创建商品",
+                "responses": {}
+            }
+        },
         "/a/product": {
             "get": {
                 "description": "获取商品",
@@ -14,6 +27,13 @@
                     "application/json"
                 ],
                 "summary": "获取商品",
+                "responses": {}
+            }
+        },
+        "/add": {
+            "post": {
+                "description": "测试Description",
+                "summary": "测试Summary",
                 "responses": {}
             }
         },
@@ -32,9 +52,44 @@
                 "responses": {}
             }
         },
-        "/create": {
+        "/cart/add": {
             "post": {
-                "responses": {}
+                "description": "通过RPC调用添加商品到购物车",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "添加商品到购物车",
+                "parameters": [
+                    {
+                        "description": "添加购物车请求",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/cart.AddCartReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "成功响应",
+                        "schema": {
+                            "$ref": "#/definitions/cart.AddCartResp"
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/cart.AddCartResp"
+                        }
+                    }
+                }
             }
         },
         "/delete": {
@@ -42,7 +97,30 @@
                 "responses": {}
             }
         },
+        "/empty": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/get": {
+            "get": {
+                "responses": {}
+            }
+        },
         "/list": {
+            "get": {
+                "responses": {}
+            },
+            "post": {
+                "responses": {}
+            }
+        },
+        "/markPaid": {
+            "post": {
+                "responses": {}
+            }
+        },
+        "/place": {
             "post": {
                 "responses": {}
             }
@@ -55,6 +133,34 @@
         "/update": {
             "post": {
                 "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "cart.AddCartReq": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "productId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "cart.AddCartResp": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "0表示成功",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
             }
         }
     }
